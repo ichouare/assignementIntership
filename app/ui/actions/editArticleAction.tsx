@@ -10,23 +10,11 @@ export async function editArticleAction(prevState : {
 }, formData : FormData) : Promise<{ status: string }> {
 
 
-  const file = formData.get("file") as File;
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = new Uint8Array(arrayBuffer);
-  let imgPath = path.join(`/uploads/`, file.name);
-  // console.log(buffer, imgPath);
-  try {
-    await fs.writeFile(`./public/uploads/${file.name}`, buffer);
-  } catch (err) {
-    console.error(`Error writing file: ${err}`);
-    return {
-      status: "400",
-    };
-  }
+  // console.log(formData)
+
 
 const id : FormDataEntryValue | null = formData?.get("id")
   const data = {
-    image: imgPath,
     title: formData.get('title'),
     content: formData.get('content'),
   };

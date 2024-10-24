@@ -41,7 +41,6 @@ export async function PUT(req:NextRequest,
         const res = await req.json();
         // console.log(res);
         // const id = res?.id;
-        const image = res?.image;
         const title = res?.title;
         const content = res?.content;
         let Query = "SELECT * FROM Articles WHERE id = $1";
@@ -52,8 +51,8 @@ export async function PUT(req:NextRequest,
         // console.log("------>", check_if_exist);
         try {
 
-            Query = "UPDATE Articles SET img = $2, title = $3, content = $4 WHERE id = $1";
-            const res = await query(Query, [id, image, title, content])
+            Query = "UPDATE Articles SET  title = $2, content = $3 WHERE id = $1";
+            const res = await query(Query, [id, title, content])
             console.log(res)
         } catch (err) {
             console.log("ERR=> ", err)

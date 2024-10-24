@@ -34,10 +34,13 @@ const EditArticle = ({ id, img, title, content }: propsType) => {
 
   // Create a reference to the form element to reset it after form submission
   const ref = useRef<HTMLFormElement>(null)
+  const titleRef = useRef<HTMLInputElement>(null)
+
   const [state, formAction] = useFormState(editArticleAction, initialState)
   
   useEffect(() => {
-    console.log(state)
+    if(titleRef.current)
+        titleRef.current.focus();
     // console.log(formData)
     // Trigger redirect when status is '200'
     if (state?.status === '200') {
@@ -47,31 +50,31 @@ const EditArticle = ({ id, img, title, content }: propsType) => {
 
   // Handle input changes and update the form data state
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, } = e.target
+    const { name, value} = e.target
     
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value ,
+      [name] : value ,
       
       // If the input is a file input, store the file
     }))
     console.log('Triggering file input', formData)
   }
   
-  const triggerFileInput = () => {
-    if (ImgRef.current) {
-      ImgRef.current.click();
+//   const triggerFileInput = () => {
+//     if (ImgRef.current) {
+//       ImgRef.current.click();
     
-    }
-};
+//     }
+// };
 
-const handleImg  = (e : React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target?.files?.[0] 
-  setFormData((prevData) => ({
-   ...prevData,
-    file: URL.createObjectURL(file),
-  }))
-}
+// const handleImg  = (e : React.ChangeEvent<HTMLInputElement>) => {
+//   const file = e.target?.files?.[0] 
+//   setFormData((prevData) => ({
+//    ...prevData,
+//     file: URL.createObjectURL(file),
+//   }))
+// }
 
   return (
     <form
@@ -86,12 +89,9 @@ const handleImg  = (e : React.ChangeEvent<HTMLInputElement>) => {
       <div className="w-full min-h-16 h-16 flex flex-col items-center justify-evenly px-4">
         <button type="submit" className="capitalize self-end bg-blue-400 w-[100px] p-2 text-white rounded-lg">publish</button>
       </div>
-      <section className="p-4 grow flex   ">
+      <section className="p-4 min-w-full grow flex   ">
         <div className="grow flex flex-col gap-4">
           <div className='w-full h-[350px]  self-center relative border'>
-            <ToggleGroup  type="single" className='absolute bg-green-100 rounded-none' >
-          <ToggleGroupItem value="b" className='bg-green-100 rounded-none cursor-pointer' onClick={triggerFileInput}><CiEdit  className='text-2xl' /></ToggleGroupItem>
-            </ToggleGroup>
             <Image
               src={formData.file}
               alt={title}
@@ -99,24 +99,18 @@ const handleImg  = (e : React.ChangeEvent<HTMLInputElement>) => {
               height={400}
               className='w-full h-full object-cover'
               />
-            <input
-            ref={ImgRef}
-              type="file"
-              id="file"
-              name="file"
-              className=" hidden w-full p-3 outline-none text-4xl placeholder:text-4xl capitalize tracking-widest"
-              onChange={handleImg}
-            />
           </div>
           <div>
             <input
+              ref={titleRef}
               type="text"
               id="title"
               name="title"
               value={formData.title}
               placeholder="title"
-              className="w-full p-3 outline-none text-4xl placeholder:text-4xl capitalize tracking-widest"
-              maxLength={12}
+              className="w-full p-3 outline-none text-base !break-normal md:text-lg placeholder:text-4xl capitalize tracking-widest"
+              minLength={20}
+              maxLength={50}
               onChange={handleChange}
               required
             />

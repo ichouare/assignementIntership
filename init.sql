@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS Articles (
   id SERIAL PRIMARY KEY,
-  img TEXT DEFAULT  'https://example.com/path-to-default-image.png',
+  img TEXT DEFAULT  '/uploads/article1.png',
   title VARCHAR(500)  NOT NULL,
   content TEXT  NOT NULL,
   create_At DATE DEFAULT NOW()

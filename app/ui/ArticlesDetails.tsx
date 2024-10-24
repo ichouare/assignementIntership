@@ -3,6 +3,10 @@
 import React from "react";
 import Link from 'next/link'
 import Image from "next/image";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { redirect } from "next/navigation";
+
 type typeProps = {
   id: number;
   img: string;
@@ -28,14 +32,21 @@ const ArticlesDetails = ({ id, img, title, content, create_at }: typeProps) => {
 
 
   const Delelefunction = async () =>{
-      const res = await deleteAction(id)
-      if(res === 200){
-       
+    try{
+      await deleteAction(id)
+      toast.success('is Deleted!')
+      setTimeout(()=>{
         router.push('/')
-      }
+      }, 2000)
+    }catch(err){
+      toast.error('can please try after!')
+    }
+
   }
+
   return (
     <article className="w-full max-w-full  sm:max-w-[640px]  border-t-2 flex flex-col gap-8 px-4 py-6">
+     <ToastContainer />
     <div className="flex items-center gap-2 w-full">
       <Avatar className="w-14 h-14">
         <AvatarImage src={"/" + img} />
@@ -47,9 +58,9 @@ const ArticlesDetails = ({ id, img, title, content, create_at }: typeProps) => {
       </div>
       <ToggleGroup type="single" className="self-start flex gap-2 cursor-pointer">
         <Link href={`/Blog/${id}/edit`}>
-          <ToggleGroupItem value="b"><CiEdit /></ToggleGroupItem>
+          <ToggleGroupItem value="b"><CiEdit  className="text-2xl cursor-pointer"/></ToggleGroupItem>
         </Link>
-        <ToggleGroupItem value="c" onClick={() => Delelefunction()}><CiTrash /></ToggleGroupItem>
+        <ToggleGroupItem value="c" className="text-2xl cursor-pointer" onClick={() => Delelefunction()}><CiTrash /></ToggleGroupItem>
       </ToggleGroup>
     </div>
     
